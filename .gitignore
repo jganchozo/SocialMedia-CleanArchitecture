@@ -45,6 +45,11 @@ Temporary Items
 .idea/**/dictionaries
 .idea/**/shelf
 
+.idea/**/vcs.xml
+.idea/**/encodings.xml
+.idea/**/indexLayout.xml
+.idea/**/projectSettingsUpdater.xml
+
 # AWS User-specific
 .idea/**/aws.xml
 
