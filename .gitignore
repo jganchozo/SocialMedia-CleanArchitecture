@@ -45,6 +45,7 @@ Temporary Items
 .idea/**/dictionaries
 .idea/**/shelf
 
+.idea
 .idea/**/vcs.xml
 .idea/**/encodings.xml
 .idea/**/indexLayout.xml
