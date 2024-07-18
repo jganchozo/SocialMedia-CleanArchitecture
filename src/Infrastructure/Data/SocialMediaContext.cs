@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Core.Entities;
+﻿using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Context;
+namespace Infrastructure.Data;
 
 public partial class SocialMediaContext : DbContext
 {
