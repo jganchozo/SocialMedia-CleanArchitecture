@@ -16,7 +16,7 @@ public partial class Usuario
 
     public bool Activo { get; set; }
 
-    public virtual ICollection<Comentario> Comentario { get; set; } = new List<Comentario>();
+    public virtual ICollection<Comment> Comentario { get; set; } = new List<Comment>();
 
-    public virtual ICollection<Publicacion> Publicacion { get; set; } = new List<Publicacion>();
+    public virtual ICollection<Post> Publicacion { get; set; } = new List<Post>();
 }

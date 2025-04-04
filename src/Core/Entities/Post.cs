@@ -1,10 +1,18 @@
-namespace Core.Entities;
+﻿namespace Core.Entities;
 
-public class Post
+public partial class Publicacion
 {
-    public int PostId { get; set; }
-    public int UserId { get; set; }
-    public DateTime Date { get; set; }
-    public string Description { get; set; } = string.Empty;
-    public string Image { get; set; } = string.Empty;
+    public int IdPublicacion { get; set; }
+
+    public int IdUsuario { get; set; }
+
+    public DateTime Fecha { get; set; }
+
+    public string Descripcion { get; set; } = null!;
+
+    public string? Imagen { get; set; }
+
+    public virtual ICollection<Comentario> Comentario { get; set; } = new List<Comentario>();
+
+    public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }
