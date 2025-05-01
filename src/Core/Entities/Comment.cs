@@ -1,20 +1,20 @@
 ﻿namespace Core.Entities;
 
-public partial class Comentario
+public partial class Comment
 {
-    public int IdComentario { get; set; }
+    public int CommentId { get; set; }
 
-    public int IdPublicacion { get; set; }
+    public int PostId { get; set; }
 
-    public int IdUsuario { get; set; }
+    public int UserId { get; set; }
 
-    public string Descripcion { get; set; } = null!;
+    public string Description { get; set; } = null!;
 
-    public DateTime Fecha { get; set; }
+    public DateTime Date { get; set; }
 
-    public bool Activo { get; set; }
+    public bool IsActive { get; set; }
 
-    public virtual Post IdPostNavigation { get; set; } = null!;
+    public virtual Post Post { get; set; } = null!;
 
-    public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }

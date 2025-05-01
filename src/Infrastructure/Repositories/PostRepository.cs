@@ -5,15 +5,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class PostRepository : IPostRepository
+public class PostRepository(SocialMediaContext context) : IPostRepository
 {
-    private readonly SocialMediaContext _context;
-    public PostRepository(SocialMediaContext context)
+    //private readonly SocialMediaContext _context = context;
+    // public PostRepository(SocialMediaContext context)
+    // {
+    //     _context = context;
+    // }
+    public async Task<IEnumerable<Post>> GetPosts()
     {
-        _context = context;
+        return await context.Posts.ToListAsync();
     }
-    public async Task<IEnumerable<Publicacion>> GetPosts()
+    
+    public async Task<Post?> GetPost(int id)
     {
-        return await _context.Publicacion.ToListAsync();
+        return await context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+    }
+    
+    public async Task InsertPost(Post post)
+    {
+        context.Posts.Add(post);
+        await context.SaveChangesAsync();
     }
 }

@@ -1,22 +1,22 @@
 ﻿namespace Core.Entities;
 
-public partial class Usuario
+public partial class User
 {
-    public int IdUsuario { get; set; }
+    public int UserId { get; set; }
 
-    public string Nombres { get; set; } = null!;
+    public string FirstName { get; set; } = null!;
 
-    public string Apellidos { get; set; } = null!;
+    public string LastName { get; set; } = null!;
 
     public string Email { get; set; } = null!;
 
-    public DateOnly FechaNacimiento { get; set; }
+    public DateOnly DateOfBirth { get; set; }
 
-    public string? Telefono { get; set; }
+    public string? Telephone { get; set; }
 
-    public bool Activo { get; set; }
+    public bool IsActive { get; set; }
 
-    public virtual ICollection<Comment> Comentario { get; set; } = new List<Comment>();
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-    public virtual ICollection<Post> Publicacion { get; set; } = new List<Post>();
+    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 }
