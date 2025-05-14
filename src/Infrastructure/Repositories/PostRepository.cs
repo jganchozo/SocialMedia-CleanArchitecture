@@ -27,4 +27,30 @@ public class PostRepository(SocialMediaContext context) : IPostRepository
         context.Posts.Add(post);
         await context.SaveChangesAsync();
     }
+
+    public async Task<bool> UpdatePost(Post post)
+    {
+        var currentPost = await GetPost(post.PostId);
+        
+        if (currentPost is null) return false;
+        
+        currentPost.Date = post.Date;
+        currentPost.Description = post.Description;
+        currentPost.Image = post.Image;
+
+        int rows = await context.SaveChangesAsync();
+        return rows > 0;
+    }
+    
+    public async Task<bool> DeletePost(int id)
+    {
+        var currentPost = await GetPost(id);
+        
+        if (currentPost is null) return false;
+        
+        context.Posts.Remove(currentPost);
+
+        int rows = await context.SaveChangesAsync();
+        return rows > 0;
+    }
 }
