@@ -28,6 +28,7 @@ builder.Services.AddDbContext<SocialMediaContext>(options =>
 
 builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblies(assemblies);

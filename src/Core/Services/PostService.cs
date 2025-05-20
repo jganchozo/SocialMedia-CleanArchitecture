@@ -3,21 +3,21 @@ using Core.Interfaces;
 
 namespace Core.Services;
 
-public class PostService(IRepository<Post> postRepository, IRepository<User> userRepository) : IPostService
+public class PostService(IUnitOfWork unitOfWork) : IPostService
 {
     public async Task<IEnumerable<Post>> GetPosts()
     {
-        return await postRepository.GetAll();
+        return await unitOfWork.PostRepository.GetAll();
     }
 
     public async Task<Post?> GetPost(int id)
     {
-        return await postRepository.GetById(id);
+        return await unitOfWork.PostRepository.GetById(id);
     }
 
     public async Task InsertPost(Post post)
     {
-        var user = await userRepository.GetById(post.UserId);
+        var user = await unitOfWork.UserRepository.GetById(post.UserId);
 
         if (user is null)
         {
@@ -28,19 +28,23 @@ public class PostService(IRepository<Post> postRepository, IRepository<User> use
         {
             throw new Exception("Content not allowed");
         }
-        
-        await postRepository.Add(post);
+
+        await unitOfWork.PostRepository.Add(post);
     }
 
     public async Task<bool> UpdatePost(Post post)
     {
-        await postRepository.Update(post);
+        await unitOfWork.PostRepository.Update(post);
         return true;
     }
 
     public async Task<bool> DeletePost(int id)
     {
-        await postRepository.Delete(id);
+        var post = await unitOfWork.PostRepository.GetById(id);
+        
+        if (post is null) return false;
+        
+        await unitOfWork.PostRepository.Delete(post);
         return true;
     }
 }
