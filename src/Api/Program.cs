@@ -16,6 +16,7 @@ builder.Services.AddAutoMapper(assemblies);
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter>();
+    options.Filters.Add<GlobalExceptionFilter>();
 }).ConfigureApiBehaviorOptions(options =>
 {
     //options.SuppressModelStateInvalidFilter = true;

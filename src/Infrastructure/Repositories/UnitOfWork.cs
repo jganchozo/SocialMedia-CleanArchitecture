@@ -6,7 +6,7 @@ namespace Infrastructure.Repositories;
 
 public class UnitOfWork(SocialMediaContext context) : IUnitOfWork
 {
-    private IRepository<Post>? _postRepository;
+    private IPostRepository? _postRepository;
     private IRepository<User>? _userRepository;
     private Repository<Comment>? _commentRepository;
 
@@ -16,7 +16,7 @@ public class UnitOfWork(SocialMediaContext context) : IUnitOfWork
         GC.SuppressFinalize(this);
     }
 
-    public IRepository<Post> PostRepository => _postRepository ??= new Repository<Post>(context);
+    public IPostRepository PostRepository => _postRepository ??= new PostRepository(context);
     public IRepository<User> UserRepository => _userRepository ??= new Repository<User>(context);
     public IRepository<Comment> CommentRepository => _commentRepository ??= new Repository<Comment>(context);
 

@@ -1,13 +1,14 @@
 using Core.Entities;
+using Core.Exceptions;
 using Core.Interfaces;
 
 namespace Core.Services;
 
 public class PostService(IUnitOfWork unitOfWork) : IPostService
 {
-    public async Task<IEnumerable<Post>> GetPosts()
+    public IEnumerable<Post> GetPosts()
     {
-        return await unitOfWork.PostRepository.GetAll();
+        return unitOfWork.PostRepository.GetAll();
     }
 
     public async Task<Post?> GetPost(int id)
@@ -21,20 +22,35 @@ public class PostService(IUnitOfWork unitOfWork) : IPostService
 
         if (user is null)
         {
-            throw new Exception("User not found");
+            throw new BusinessException("User not found");
+        }
+        
+        var userPosts = await unitOfWork.PostRepository.GetPostsByUser(post.UserId);
+
+        var posts = userPosts.ToList();
+        if (posts.Count < 10)
+        {
+            var lastPost = posts.OrderByDescending(x => x.Date).FirstOrDefault();
+            if (lastPost is not null && (DateTime.Now - lastPost.Date).TotalDays < 7)
+            {
+                throw new BusinessException("You are not allowed to add a post");
+            }
         }
 
         if (post.Description.Contains("sex", StringComparison.CurrentCultureIgnoreCase))
         {
-            throw new Exception("Content not allowed");
+            throw new BusinessException("Content not allowed");
         }
 
         await unitOfWork.PostRepository.Add(post);
+        await unitOfWork.SaveChangesAsync();
     }
 
     public async Task<bool> UpdatePost(Post post)
     {
-        await unitOfWork.PostRepository.Update(post);
+        unitOfWork.PostRepository.Update(post);
+        await unitOfWork.SaveChangesAsync();
+        
         return true;
     }
 
@@ -44,7 +60,8 @@ public class PostService(IUnitOfWork unitOfWork) : IPostService
         
         if (post is null) return false;
         
-        await unitOfWork.PostRepository.Delete(post);
+        unitOfWork.PostRepository.Delete(post);
+        await unitOfWork.SaveChangesAsync();
         return true;
     }
 }

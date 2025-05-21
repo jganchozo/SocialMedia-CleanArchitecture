@@ -8,43 +8,41 @@ namespace Infrastructure.Repositories;
 public class Repository<T> : IRepository<T> where T : BaseEntity
 {
     private readonly SocialMediaContext _context;
-    private readonly DbSet<T> _entities;
+    protected readonly DbSet<T> Entities;
 
     public Repository(SocialMediaContext context)
     {
         _context = context;
-        _entities = context.Set<T>();
+        Entities = context.Set<T>();
     }
     
-    public async Task<IEnumerable<T>> GetAll()
+    public IEnumerable<T> GetAll()
     {
-        return await _entities.ToListAsync();
+        return Entities.AsEnumerable();
+    }
+    
+    public async Task<IEnumerable<T>> GetAllAsync()
+    {
+        return await Entities.ToListAsync();
     }
 
     public async Task<T?> GetById(int id)
     {
-        return await _entities.FindAsync(id);
+        return await Entities.FindAsync(id);
     }
 
     public async Task Add(T entity)
     {
-        await _entities.AddAsync(entity);
-        await _context.SaveChangesAsync();
+        await Entities.AddAsync(entity);
     }
 
-    public async Task Update(T entity)
+    public void Update(T entity)
     {
-        _entities.Update(entity);
-        await _context.SaveChangesAsync();
+        Entities.Update(entity);
     }
-
-    public async Task Delete(int id)
+    
+    public void Delete(T entity)
     {
-        var entity = await GetById(id);
-        
-        if (entity is null) return;
-        
-        _entities.Remove(entity);
-        await _context.SaveChangesAsync();
+        Entities.Remove(entity);
     }
 }
