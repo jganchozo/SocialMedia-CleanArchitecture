@@ -3,6 +3,7 @@ using AutoMapper;
 using Core.DTOs;
 using Core.Entities;
 using Core.Interfaces;
+using Core.QueryFilters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -21,9 +22,11 @@ public class PostController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetPosts()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<IEnumerable<PostDto>>))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse<IEnumerable<PostDto>>))]
+    public IActionResult GetPosts([FromQuery] PostQueryFilter filters)
     {
-        var posts = _postService.GetPosts();
+        var posts = _postService.GetPosts(filters);
         var postsDto = _mapper.Map<IEnumerable<PostDto>>(posts);
         var response = new ApiResponse<IEnumerable<PostDto>>(postsDto);
 

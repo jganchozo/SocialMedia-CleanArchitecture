@@ -1,14 +1,23 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces;
+using Core.QueryFilters;
+using Core.Extensions;
 
 namespace Core.Services;
 
 public class PostService(IUnitOfWork unitOfWork) : IPostService
 {
-    public IEnumerable<Post> GetPosts()
+    public IEnumerable<Post> GetPosts(PostQueryFilter filters)
     {
-        return unitOfWork.PostRepository.GetAll();
+        var posts = unitOfWork.PostRepository.GetAll();
+
+        posts = posts
+            .FilterByUserId(filters.UserId)
+            .FilterByDate(filters.Date)
+            .FilterByDescription(filters.Description);
+
+        return posts;
     }
 
     public async Task<Post?> GetPost(int id)

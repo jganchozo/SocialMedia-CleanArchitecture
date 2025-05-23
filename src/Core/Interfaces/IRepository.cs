@@ -4,7 +4,7 @@ namespace Core.Interfaces;
 
 public interface IRepository<T> where T : BaseEntity
 {
-    IEnumerable<T> GetAll();
+    IQueryable<T> GetAll();
     Task<IEnumerable<T>> GetAllAsync();
     Task<T?> GetById(int id);
     Task Add(T entity);
