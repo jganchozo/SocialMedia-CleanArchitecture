@@ -18,10 +18,10 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
     
     public IQueryable<T> GetAll()
     {
-        return Entities.AsQueryable();
+        return Entities.AsQueryable().AsNoTracking();
     }
     
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public async Task<List<T>> GetAllAsync()
     {
         return await Entities.ToListAsync();
     }

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Api.Responses;
 using AutoMapper;
 using Core.DTOs;
@@ -29,6 +30,18 @@ public class PostController : ControllerBase
         var posts = _postService.GetPosts(filters);
         var postsDto = _mapper.Map<IEnumerable<PostDto>>(posts);
         var response = new ApiResponse<IEnumerable<PostDto>>(postsDto);
+
+        var metadata = new
+        {
+            posts.TotalCount,
+            posts.PageSize,
+            posts.CurrentPage,
+            posts.TotalPages,
+            posts.HasPreviousPage,
+            posts.HasNextPage
+        };
+        
+        Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(metadata));
 
         return Ok(response);
     }

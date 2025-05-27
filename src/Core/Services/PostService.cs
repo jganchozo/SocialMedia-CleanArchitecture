@@ -1,3 +1,4 @@
+using Core.CustomEntities;
 using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces;
@@ -8,7 +9,7 @@ namespace Core.Services;
 
 public class PostService(IUnitOfWork unitOfWork) : IPostService
 {
-    public IEnumerable<Post> GetPosts(PostQueryFilter filters)
+    public PagedList<Post> GetPosts(PostQueryFilter filters)
     {
         var posts = unitOfWork.PostRepository.GetAll();
 
@@ -17,7 +18,9 @@ public class PostService(IUnitOfWork unitOfWork) : IPostService
             .FilterByDate(filters.Date)
             .FilterByDescription(filters.Description);
 
-        return posts;
+        var pagedPosts = PagedList<Post>.Create(posts, filters.PageNumber, filters.PageSize);
+
+        return pagedPosts;
     }
 
     public async Task<Post?> GetPost(int id)
