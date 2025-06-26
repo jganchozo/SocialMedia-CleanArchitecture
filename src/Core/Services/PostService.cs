@@ -4,13 +4,19 @@ using Core.Exceptions;
 using Core.Interfaces;
 using Core.QueryFilters;
 using Core.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace Core.Services;
 
-public class PostService(IUnitOfWork unitOfWork) : IPostService
+public class PostService(IUnitOfWork unitOfWork, IOptions<PaginationOptions> options) : IPostService
 {
+    private readonly PaginationOptions _paginationOptions = options.Value;
+
     public PagedList<Post> GetPosts(PostQueryFilter filters)
     {
+        filters.PageNumber = filters.PageNumber == 0 ? _paginationOptions.DefaultPageNumber : filters.PageNumber;
+        filters.PageSize = filters.PageSize == 0 ? _paginationOptions.DefaultPageSize : filters.PageSize;
+
         var posts = unitOfWork.PostRepository.GetAll();
 
         posts = posts
