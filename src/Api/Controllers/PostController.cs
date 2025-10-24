@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
+[Produces("application/json")]
 [ApiController]
 [Route("api/[controller]s")]
 public class PostController : ControllerBase
@@ -26,6 +27,11 @@ public class PostController : ControllerBase
         _uriService = uriService;
     }
 
+    /// <summary>
+    /// Retrieve all posts
+    /// </summary>
+    /// <param name="filters">filters</param>
+    /// <returns></returns>
     [HttpGet(Name = nameof(GetPosts))]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<IEnumerable<PostDto>>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse<IEnumerable<PostDto>>))]

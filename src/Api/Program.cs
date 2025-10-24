@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 using Core.Interfaces;
 using Core.Services;
@@ -41,7 +42,7 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IUriService>(provider =>
 {
     var accessor = provider.GetRequiredService<IHttpContextAccessor>();
-    var request = accessor?.HttpContext?.Request;
+    var request = accessor.HttpContext?.Request;
     var absoluteUri = string.Concat(request?.Scheme, "://", request?.Host.ToUriComponent());
 
     return new UriService(absoluteUri);
@@ -52,7 +53,14 @@ builder.Services.AddValidatorsFromAssemblies(assemblies);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(doc =>
+{
+    //doc.SwaggerDoc("v1", new() { Title = "Social Media API", Version = "v1" });
+    
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    doc.IncludeXmlComments(xmlPath);
+});
 
 var app = builder.Build();
 
